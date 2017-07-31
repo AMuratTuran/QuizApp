@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">QuizAppEx</string>
+    <string name="prompt_username">Username</string>
+    <string name="action_sign_in">SUBMIT</string>
+    <string-array name="options">
+        <item>Drinks</item>
+        <item>Food</item>
+        <item>Stores</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="correct_toast">TRUE</string>
+    <string name="incorrect_toast">FALSE</string>
+
+</resources>
