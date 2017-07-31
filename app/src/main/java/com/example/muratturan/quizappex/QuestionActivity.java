@@ -49,7 +49,7 @@ public class QuestionActivity extends Activity {
     private boolean isFalse;
     private boolean isOutOfTime ;
     private int lostPoints = 50 ;
-    private int remainingTime = 15 ;
+    private int remainingTime ;
     private boolean running = true;
     private TextView scoreBoard;
     private String categoryTag;
@@ -63,6 +63,7 @@ public class QuestionActivity extends Activity {
         setContentView(R.layout.activity_question);
 
         temp = new ArrayList<>();
+        remainingTime = 15 ;
 
         Intent mIntent = getIntent();
         question = mIntent.getStringExtra("questions");
@@ -71,6 +72,8 @@ public class QuestionActivity extends Activity {
         buttonPointString = mIntent.getStringExtra("buttonPoint");
         earnedPoints = Integer.parseInt(buttonPointString);
 
+        System.out.print("**********");
+        System.out.println(index);
 
         TextView text = (TextView) findViewById(R.id.question);
         text.setText(question);
@@ -131,7 +134,7 @@ public class QuestionActivity extends Activity {
                                     Wronganswers.add(ds.getValue().toString());
                                 }
                                 updateQuestion();
-                                runTimer();
+
                             }
 
                             @Override
@@ -153,6 +156,8 @@ public class QuestionActivity extends Activity {
         } catch (Exception e) {
             System.out.println(e);
         }
+
+        runTimer();
 
 
     }
@@ -219,12 +224,9 @@ public class QuestionActivity extends Activity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 toast.cancel();
                 updateScore();
                 useIntent();
-
-
             }
         }, 1000);
 
@@ -241,11 +243,14 @@ public class QuestionActivity extends Activity {
 
                 String time = String.format("%d", remainingTime);
                 timeView.setText(time);
+                System.out.println(running);
                 if (running) {
-
+                    System.out.println(remainingTime);
                     if (remainingTime != 0)
                         remainingTime--;
+
                     else {
+                        System.out.println("249");
                         totalPoints -= lostPoints;
                         isOutOfTime = true;
                         updateScore();
@@ -273,6 +278,19 @@ public class QuestionActivity extends Activity {
         intent.putExtra("isOutOfTime", isOutOfTime);
         intent.putExtra("categoryTag",categoryTag);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        running = false;
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        running = true;
     }
 
 
