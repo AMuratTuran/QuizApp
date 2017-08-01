@@ -41,21 +41,18 @@ public class QuestionActivity extends Activity {
     private ArrayList<String> mFalseAnswer = new ArrayList<>();
     private int buttonValue;
     private int index;
-    private int totalPoints ;
-    private int earnedPoints ;
+    private int totalPoints;
+    private int earnedPoints;
     private int toastText = 0;
     private String buttonPointString;
-    private boolean isTrue ;
+    private boolean isTrue;
     private boolean isFalse;
-    private boolean isOutOfTime ;
-    private int lostPoints = 50 ;
-    private int remainingTime ;
+    private boolean isOutOfTime;
+    private int lostPoints = 50;
+    private int remainingTime;
     private boolean running = true;
     private TextView scoreBoard;
     private String categoryTag;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,20 +60,25 @@ public class QuestionActivity extends Activity {
         setContentView(R.layout.activity_question);
 
         temp = new ArrayList<>();
-        remainingTime = 15 ;
+        remainingTime = 15;
 
         Intent mIntent = getIntent();
         question = mIntent.getStringExtra("questions");
         index = mIntent.getIntExtra("mIndex", 0);
         categoryTag = mIntent.getStringExtra("category");
         buttonPointString = mIntent.getStringExtra("buttonPoint");
+        totalPoints = mIntent.getIntExtra("currentScore", 0);
         earnedPoints = Integer.parseInt(buttonPointString);
+
 
         System.out.print("**********");
         System.out.println(index);
 
         TextView text = (TextView) findViewById(R.id.question);
         text.setText(question);
+
+        scoreBoard = (TextView) findViewById(R.id.score);
+        scoreBoard.setText("" + totalPoints);
 
         answer1Button = (Button) findViewById(R.id.answer1);
         answer2Button = (Button) findViewById(R.id.answer2);
@@ -205,15 +207,17 @@ public class QuestionActivity extends Activity {
             for (int i = 0; i < 3; i++) {
                 ButtonList[i].setClickable(false);
             }
-            isTrue = true ;
+            isTrue = true;
             toastText = R.string.correct_toast;
+
         } else {
             totalPoints -= lostPoints;
             for (int i = 0; i < 3; i++) {
                 ButtonList[i].setClickable(false);
             }
-            isFalse = true ;
+            isFalse = true;
             toastText = R.string.incorrect_toast;
+
         }
 
         final Toast toast = Toast.makeText(this, toastText, Toast.LENGTH_SHORT);
@@ -243,14 +247,12 @@ public class QuestionActivity extends Activity {
 
                 String time = String.format("%d", remainingTime);
                 timeView.setText(time);
-                System.out.println(running);
                 if (running) {
                     System.out.println(remainingTime);
                     if (remainingTime != 0)
                         remainingTime--;
 
                     else {
-                        System.out.println("249");
                         totalPoints -= lostPoints;
                         isOutOfTime = true;
                         updateScore();
@@ -264,19 +266,21 @@ public class QuestionActivity extends Activity {
     }
 
     private void updateScore() {
-        scoreBoard = (TextView) findViewById(R.id.score);
+
         String mScore = String.format("%d", totalPoints);
         scoreBoard.setText(mScore);
     }
 
 
-    private void useIntent(){
+    private void useIntent() {
 
-        Intent intent = new Intent(this,PointActivity.class);
-        intent.putExtra("isTrue",isTrue);
-        intent.putExtra("isFalse",isFalse);
+        Intent intent = new Intent(this, PointActivity.class);
+        intent.putExtra("isTrue", isTrue);
+        intent.putExtra("isFalse", isFalse);
         intent.putExtra("isOutOfTime", isOutOfTime);
-        intent.putExtra("categoryTag",categoryTag);
+        intent.putExtra("categoryTag", categoryTag);
+        intent.putExtra("prevTotalPoints", totalPoints);
+        intent.putExtra("btnIndex", index);
         startActivity(intent);
     }
 

@@ -2,10 +2,12 @@ package com.example.muratturan.quizappex;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -21,6 +23,12 @@ public class PointActivity extends AppCompatActivity {
     private int index;
     private String buttonPoint;
     private String categoryTag;
+    private int totPoints;
+    private boolean isTrue;
+    private boolean isFalse;
+    private boolean isOutOfTime;
+    private boolean clickable;
+    private String colorCode;
 
 
     @Override
@@ -28,16 +36,49 @@ public class PointActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_point);
 
+        if (savedInstanceState != null) {
+            colorCode = savedInstanceState.getString("color");
+            findViewById(btnList[index]).setBackgroundColor(Color.parseColor(colorCode));
+        }
+
         Intent mIntent = getIntent();
         questionArrayList = mIntent.getStringArrayListExtra("MultArrayList");
         categoryTag = mIntent.getStringExtra("category");
+        totPoints = mIntent.getIntExtra("prevTotalPoints", 0);
+        index = mIntent.getIntExtra("btnIndex", 0);
+        isTrue = mIntent.getBooleanExtra("isTrue", false);
+        isFalse = mIntent.getBooleanExtra("isFalse", false);
+        isOutOfTime = mIntent.getBooleanExtra("isOutOfTime", false);
 
         if (questionArrayList == null) {
             System.out.println("girdi");
             categoryTag = mIntent.getStringExtra("categoryTag");
             System.out.println(categoryTag);
-            questionArrayList= CategoryActivity.createArrayList("Multiplication");
+            questionArrayList = CategoryActivity.createArrayList("Multiplication");
 
+        }
+
+        TextView totScore = (TextView) findViewById(R.id.totalScore);
+        totScore.setText("" + totPoints);
+
+        if (isTrue) {
+            Button button = (Button) findViewById(btnList[index]);
+            button.setBackgroundColor(Color.parseColor("#25FF00"));
+            button.setClickable(false);
+            clickable = button.isClickable();
+            colorCode = "#25FF00";
+
+        } else if (isFalse) {
+            Button button = (Button) findViewById(btnList[index]);
+            button.setBackgroundColor(Color.parseColor("#FF0000"));
+            button.setClickable(false);
+            clickable = button.isClickable();
+            colorCode = "#FF0000";
+
+        } else if (isOutOfTime) {
+            Button button = (Button) findViewById(btnList[index]);
+            button.setBackgroundColor(Color.parseColor("#003BFF"));
+            colorCode = "#003BFF";
         }
 
 
@@ -159,6 +200,8 @@ public class PointActivity extends AppCompatActivity {
         intent.putExtra("mIndex", index);
         intent.putExtra("buttonPoint", buttonPoint);
         intent.putExtra("category", categoryTag);
+        intent.putExtra("currentScore", totPoints);
         startActivity(intent);
     }
+
 }

@@ -4,28 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.muratturan.quizappex.PointActivity"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="com.example.muratturan.quizappex.PointActivity">
+
+
+    <TextView
+        android:id="@+id/totalScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="aa"
+        android:textSize="36sp"
+        android:gravity="center"/>
 
     <FrameLayout
         android:id="@+id/point_fragment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TableRow
+                android:id="@+id/row1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/row1">
+                android:layout_height="match_parent">
 
                 <Button
                     android:id="@+id/button1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#FF0000"
                     android:text="100" />
 
                 <Button
@@ -106,9 +117,9 @@
             </TableRow>
 
 
-
-
         </TableLayout>
 
     </FrameLayout>
+
+
 </LinearLayout>
