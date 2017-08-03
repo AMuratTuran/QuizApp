@@ -2,10 +2,14 @@ package com.example.muratturan.quizappex;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -42,14 +46,15 @@ public class PointActivity extends AppCompatActivity {
     private Button button12;
     private Button[] ButtonList;
     private int questionNumber = 0;
-
+    private int totalTime ;
+    Handler handler = new Handler();
+    Runnable runnable;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_point);
-
 
         Intent mIntent = getIntent();
         questionArrayList = mIntent.getStringArrayListExtra("MultArrayList");
@@ -61,7 +66,10 @@ public class PointActivity extends AppCompatActivity {
         isOutOfTime = mIntent.getBooleanExtra("isOutOfTime", false);
         buttonColorList = mIntent.getStringArrayListExtra("colorList");
         buttonClickableList = mIntent.getStringArrayListExtra("clickList");
-        questionNumber = mIntent.getIntExtra("questionNumber",0);
+        questionNumber = mIntent.getIntExtra("questionNumber", 0);
+        totalTime = mIntent.getIntExtra("finalTime",0);
+
+        runTotalTimer();
 
 
 
@@ -93,7 +101,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 0;
                 buttonPoint = button1.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
 
             }
@@ -104,7 +112,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 1;
                 buttonPoint = button2.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -114,7 +122,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 2;
                 buttonPoint = button3.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -124,7 +132,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 3;
                 buttonPoint = button4.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -134,7 +142,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 4;
                 buttonPoint = button5.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -144,7 +152,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 5;
                 buttonPoint = button6.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -154,7 +162,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 6;
                 buttonPoint = button7.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -164,7 +172,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 7;
                 buttonPoint = button8.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -174,7 +182,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 8;
                 buttonPoint = button9.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -184,7 +192,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 9;
                 buttonPoint = button10.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -194,7 +202,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 10;
                 buttonPoint = button11.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -204,7 +212,7 @@ public class PointActivity extends AppCompatActivity {
             public void onClick(View view) {
                 index = 11;
                 buttonPoint = button12.getText().toString();
-                questionNumber += 1 ;
+                questionNumber += 1;
                 useIntent();
             }
         });
@@ -242,13 +250,15 @@ public class PointActivity extends AppCompatActivity {
             ButtonList[index].setBackgroundColor(Color.parseColor("#003BFF"));
             ButtonList[index].setClickable(false);
             buttonColorList.set(index, "#003BFF");
-            buttonClickableList.set(index,"false");
+            buttonClickableList.set(index, "false");
 
         }
 
     }
 
     private void useIntent() {
+
+
         Intent intent = new Intent(this, QuestionActivity.class);
         intent.putExtra("questions", questionArrayList.get(index));
         intent.putExtra("mIndex", index);
@@ -257,16 +267,36 @@ public class PointActivity extends AppCompatActivity {
         intent.putExtra("currentScore", totPoints);
         intent.putStringArrayListExtra("colorList", buttonColorList);
         intent.putStringArrayListExtra("clickList", buttonClickableList);
-        intent.putExtra("finalPoints",totPoints);
-        intent.putExtra("questionNumber",questionNumber);
+        intent.putExtra("finalPoints", totPoints);
+        intent.putExtra("questionNumber", questionNumber);
+        intent.putExtra("totalTime",totalTime);
+        handler.removeCallbacks(runnable);
         startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(this,CategoryActivity.class);
+        Intent intent = new Intent(this, CategoryActivity.class);
         startActivity(intent);
 
     }
+
+
+    private void runTotalTimer() {
+
+
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                totalTime += 1 ;
+                System.out.println("++++++++++"+totalTime);
+                handler.postDelayed(this,1000);
+            }
+        };
+        handler.post(runnable);
+
+    }
+
+
 }

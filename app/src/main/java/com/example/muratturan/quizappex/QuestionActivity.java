@@ -2,23 +2,15 @@ package com.example.muratturan.quizappex;
 
 
 import android.app.Activity;
-import android.app.LoaderManager;
-import android.app.ProgressDialog;
 import android.content.Intent;
-
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +28,7 @@ public class QuestionActivity extends Activity {
     private ArrayList<String> colorList = new ArrayList<>();
     private ArrayList<String> clickList = new ArrayList<>();
     private String question;
-    private DatabaseReference AnswerDatabase ;
+    private DatabaseReference AnswerDatabase;
     private DatabaseReference wrongAnsDatabase;
     private Button answer1Button;
     private Button answer2Button;
@@ -59,10 +51,10 @@ public class QuestionActivity extends Activity {
     private boolean running = true;
     private TextView scoreBoard;
     private String categoryTag;
-    private String colorCode ;
-    private int questionNumber ;
-    private int totalTime = 0 ;
-    private boolean totalTimeCondition = true;
+    private int questionNumber;
+    private int totalTime ;
+    Handler handler = new Handler();
+    Runnable runnable;
 
 
     @Override
@@ -70,7 +62,14 @@ public class QuestionActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
 
-
+        final RelativeLayout questionLayout = findViewById(R.id.questionLayout);
+        questionLayout.setVisibility(View.INVISIBLE);
+        final RelativeLayout progressBarLayout = findViewById(R.id.progressBarLayout);
+        progressBarLayout.setVisibility(View.VISIBLE);
+        final ProgressBar progressBar = findViewById(R.id.progressBar4);
+        if (progressBar.getVisibility() != View.VISIBLE) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
 
 
         temp = new ArrayList<>();
@@ -84,20 +83,21 @@ public class QuestionActivity extends Activity {
         totalPoints = mIntent.getIntExtra("currentScore", 0);
         earnedPoints = Integer.parseInt(buttonPointString);
         colorList = mIntent.getStringArrayListExtra("colorList");
-        clickList= mIntent.getStringArrayListExtra("clickList");
-        questionNumber = mIntent.getIntExtra("questionNumber",0);
+        clickList = mIntent.getStringArrayListExtra("clickList");
+        questionNumber = mIntent.getIntExtra("questionNumber", 0);
+        totalTime = mIntent.getIntExtra("totalTime",0);
 
 
-        TextView text = (TextView) findViewById(R.id.question);
+        TextView text = findViewById(R.id.question);
         text.setText(question);
 
-        scoreBoard = (TextView) findViewById(R.id.score);
+        scoreBoard = findViewById(R.id.score);
         scoreBoard.setText("" + totalPoints);
 
-        answer1Button = (Button) findViewById(R.id.answer1);
-        answer2Button = (Button) findViewById(R.id.answer2);
-        answer3Button = (Button) findViewById(R.id.answer3);
-        answer4Button = (Button) findViewById(R.id.answer4);
+        answer1Button = findViewById(R.id.answer1);
+        answer2Button = findViewById(R.id.answer2);
+        answer3Button = findViewById(R.id.answer3);
+        answer4Button = findViewById(R.id.answer4);
         ButtonList = new Button[]{
                 answer1Button, answer2Button, answer3Button, answer4Button
         };
@@ -128,8 +128,8 @@ public class QuestionActivity extends Activity {
         });
 
 
-        if(categoryTag.equals("Multiplication"))
-        AnswerDatabase = FirebaseDatabase.getInstance().getReference().child("MultCorrect");
+        if (categoryTag.equals("Multiplication"))
+            AnswerDatabase = FirebaseDatabase.getInstance().getReference().child("MultCorrect");
         else AnswerDatabase = FirebaseDatabase.getInstance().getReference().child("SumCorrect");
 
         try {
@@ -153,6 +153,9 @@ public class QuestionActivity extends Activity {
                                     Wronganswers.add(ds.getValue().toString());
                                 }
                                 updateQuestion();
+                                progressBarLayout.setVisibility(View.INVISIBLE);
+                                progressBar.setVisibility(View.INVISIBLE);
+                                questionLayout.setVisibility(View.VISIBLE);
 
                             }
 
@@ -177,11 +180,8 @@ public class QuestionActivity extends Activity {
         }
 
 
-
         runTimer();
-        if(questionNumber== 1 )
         runTotalTimer();
-
     }
 
 
@@ -259,7 +259,7 @@ public class QuestionActivity extends Activity {
 
     private void runTimer() {
 
-        final TextView timeView = (TextView) findViewById(R.id.timer);
+        final TextView timeView = findViewById(R.id.timer);
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
@@ -284,19 +284,19 @@ public class QuestionActivity extends Activity {
         });
     }
 
-    private void runTotalTimer(){
-        final Handler handler = new Handler();
-        handler.post(new Runnable() {
+    private void runTotalTimer() {
+
+
+        runnable = new Runnable() {
             @Override
             public void run() {
-
-                    if(totalTimeCondition)
-                        totalTime += 1;
-
-                System.out.println("*************"+totalTime);
+               totalTime += 1 ;
+                System.out.println("++++++++++"+totalTime);
                 handler.postDelayed(this,1000);
             }
-        });
+        };
+        handler.post(runnable);
+
     }
 
     private void updateScore() {
@@ -307,15 +307,14 @@ public class QuestionActivity extends Activity {
 
     private void useIntent() {
 
-        if(questionNumber == 12 ){
-            Intent intent = new Intent(this,ResultActivity.class);
-            totalTimeCondition = false;
-            System.out.println("-------------------"+totalTime);
-            intent.putExtra("finalTime",totalTime);
-            intent.putExtra("finalPoints",totalPoints);
+        if (questionNumber == 12) {
+            Intent intent = new Intent(this, ResultActivity.class);
+            intent.putExtra("finalTime", totalTime);
+            intent.putExtra("finalPoints", totalPoints);
+            handler.removeCallbacks(runnable);
             startActivity(intent);
 
-        }else {
+        } else {
             Intent intent = new Intent(this, PointActivity.class);
             intent.putExtra("isTrue", isTrue);
             intent.putExtra("isFalse", isFalse);
@@ -323,14 +322,14 @@ public class QuestionActivity extends Activity {
             intent.putExtra("categoryTag", categoryTag);
             intent.putExtra("prevTotalPoints", totalPoints);
             intent.putExtra("btnIndex", index);
-            intent.putStringArrayListExtra("colorList",colorList);
-            intent.putStringArrayListExtra("clickList",clickList);
-            intent.putExtra("questionNumber",questionNumber);
+            intent.putStringArrayListExtra("colorList", colorList);
+            intent.putStringArrayListExtra("clickList", clickList);
+            intent.putExtra("questionNumber", questionNumber);
+            intent.putExtra("finalTime", totalTime);
+            handler.removeCallbacks(runnable);
             startActivity(intent);
 
         }
-
-
     }
 
     @Override

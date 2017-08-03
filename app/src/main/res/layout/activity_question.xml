@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.muratturan.quizappex.QuestionActivity">
+    tools:context="com.example.muratturan.quizappex.QuestionActivity"
+    >
 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/questionLayout">
 
     <TextView
         android:id="@+id/question"
@@ -23,7 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:textSize="18sp" />
@@ -94,6 +98,26 @@
         android:backgroundTint="#aaa"
         android:text="Answer4"
         android:textStyle="bold" />
+
+</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:id="@+id/progressBarLayout">
+
+        <ProgressBar
+            android:id="@+id/progressBar4"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="14dp" />
+
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

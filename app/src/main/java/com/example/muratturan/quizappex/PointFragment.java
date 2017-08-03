@@ -29,8 +29,8 @@ public class PointFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-    }
 
+    }
 
     @Override
     public void onAttach(Activity activity) {

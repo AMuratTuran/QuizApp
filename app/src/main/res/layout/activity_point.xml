@@ -6,23 +6,27 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.example.muratturan.quizappex.PointActivity">
+    tools:context="com.example.muratturan.quizappex.PointActivity"
+    android:id="@+id/pointLayout"
+    android:visibility="visible">
 
 
     <TextView
         android:id="@+id/totalScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="aa"
         android:textSize="36sp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="57dp" />
 
     <FrameLayout
         android:id="@+id/point_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_centerHorizontal="true"
+        >
 
         <TableLayout
             android:layout_width="match_parent"
