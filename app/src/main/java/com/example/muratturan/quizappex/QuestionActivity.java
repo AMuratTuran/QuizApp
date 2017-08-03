@@ -2,9 +2,14 @@ package com.example.muratturan.quizappex;
 
 
 import android.app.Activity;
+import android.app.LoaderManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 
 import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Handler;
@@ -26,11 +31,12 @@ import java.util.Random;
 
 public class QuestionActivity extends Activity {
 
-
     private ArrayList<String> MultCorrect = new ArrayList<>();
     private ArrayList<String> Wronganswers = new ArrayList<>();
+    private ArrayList<String> colorList = new ArrayList<>();
+    private ArrayList<String> clickList = new ArrayList<>();
     private String question;
-    private DatabaseReference multCorrectDatabase;
+    private DatabaseReference AnswerDatabase ;
     private DatabaseReference wrongAnsDatabase;
     private Button answer1Button;
     private Button answer2Button;
@@ -53,11 +59,19 @@ public class QuestionActivity extends Activity {
     private boolean running = true;
     private TextView scoreBoard;
     private String categoryTag;
+    private String colorCode ;
+    private int questionNumber ;
+    private int totalTime = 0 ;
+    private boolean totalTimeCondition = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
+
+
+
 
         temp = new ArrayList<>();
         remainingTime = 15;
@@ -69,10 +83,10 @@ public class QuestionActivity extends Activity {
         buttonPointString = mIntent.getStringExtra("buttonPoint");
         totalPoints = mIntent.getIntExtra("currentScore", 0);
         earnedPoints = Integer.parseInt(buttonPointString);
+        colorList = mIntent.getStringArrayListExtra("colorList");
+        clickList= mIntent.getStringArrayListExtra("clickList");
+        questionNumber = mIntent.getIntExtra("questionNumber",0);
 
-
-        System.out.print("**********");
-        System.out.println(index);
 
         TextView text = (TextView) findViewById(R.id.question);
         text.setText(question);
@@ -113,11 +127,14 @@ public class QuestionActivity extends Activity {
             }
         });
 
-        multCorrectDatabase = FirebaseDatabase.getInstance().getReference().child("MultCorrect");
+
+        if(categoryTag.equals("Multiplication"))
+        AnswerDatabase = FirebaseDatabase.getInstance().getReference().child("MultCorrect");
+        else AnswerDatabase = FirebaseDatabase.getInstance().getReference().child("SumCorrect");
 
         try {
 
-            multCorrectDatabase.addValueEventListener(new ValueEventListener() {
+            AnswerDatabase.addValueEventListener(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -141,11 +158,11 @@ public class QuestionActivity extends Activity {
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                System.out.println(databaseError);
+
                             }
                         });
                     } catch (Exception e) {
-                        Log.d("afsdfds", "" + e);
+
                     }
                 }
 
@@ -156,11 +173,14 @@ public class QuestionActivity extends Activity {
 
             });
         } catch (Exception e) {
-            System.out.println(e);
+
         }
 
-        runTimer();
 
+
+        runTimer();
+        if(questionNumber== 1 )
+        runTotalTimer();
 
     }
 
@@ -248,7 +268,6 @@ public class QuestionActivity extends Activity {
                 String time = String.format("%d", remainingTime);
                 timeView.setText(time);
                 if (running) {
-                    System.out.println(remainingTime);
                     if (remainingTime != 0)
                         remainingTime--;
 
@@ -265,8 +284,22 @@ public class QuestionActivity extends Activity {
         });
     }
 
-    private void updateScore() {
+    private void runTotalTimer(){
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
 
+                    if(totalTimeCondition)
+                        totalTime += 1;
+
+                System.out.println("*************"+totalTime);
+                handler.postDelayed(this,1000);
+            }
+        });
+    }
+
+    private void updateScore() {
         String mScore = String.format("%d", totalPoints);
         scoreBoard.setText(mScore);
     }
@@ -274,14 +307,30 @@ public class QuestionActivity extends Activity {
 
     private void useIntent() {
 
-        Intent intent = new Intent(this, PointActivity.class);
-        intent.putExtra("isTrue", isTrue);
-        intent.putExtra("isFalse", isFalse);
-        intent.putExtra("isOutOfTime", isOutOfTime);
-        intent.putExtra("categoryTag", categoryTag);
-        intent.putExtra("prevTotalPoints", totalPoints);
-        intent.putExtra("btnIndex", index);
-        startActivity(intent);
+        if(questionNumber == 12 ){
+            Intent intent = new Intent(this,ResultActivity.class);
+            totalTimeCondition = false;
+            System.out.println("-------------------"+totalTime);
+            intent.putExtra("finalTime",totalTime);
+            intent.putExtra("finalPoints",totalPoints);
+            startActivity(intent);
+
+        }else {
+            Intent intent = new Intent(this, PointActivity.class);
+            intent.putExtra("isTrue", isTrue);
+            intent.putExtra("isFalse", isFalse);
+            intent.putExtra("isOutOfTime", isOutOfTime);
+            intent.putExtra("categoryTag", categoryTag);
+            intent.putExtra("prevTotalPoints", totalPoints);
+            intent.putExtra("btnIndex", index);
+            intent.putStringArrayListExtra("colorList",colorList);
+            intent.putStringArrayListExtra("clickList",clickList);
+            intent.putExtra("questionNumber",questionNumber);
+            startActivity(intent);
+
+        }
+
+
     }
 
     @Override
@@ -296,7 +345,6 @@ public class QuestionActivity extends Activity {
         super.onStart();
         running = true;
     }
-
 
 }
 
