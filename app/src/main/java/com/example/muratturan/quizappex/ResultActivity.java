@@ -33,7 +33,6 @@ public class ResultActivity extends AppCompatActivity {
         int secs = totalTime % 60;
         String editedTime = String.format("%02d:%02d", minutes, secs);
         timeBoard.setText(editedTime);
-
     }
 
     @Override
