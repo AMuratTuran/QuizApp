@@ -13,4 +13,14 @@
     <string name="correct_toast">TRUE</string>
     <string name="incorrect_toast">FALSE</string>
 
+    <string-array name="titles">
+        <item>Top Players</item>
+        <item>Play Now</item>
+        <item>Friends List</item>
+        <item>My Profile</item>
+    </string-array>
+
+    <string name="open_drawer">Open drawer</string>
+    <string name="close_drawer">Close drawer</string>
+
 </resources>
