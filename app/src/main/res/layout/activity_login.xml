@@ -1,69 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     tools:context="com.example.muratturan.quizappex.LoginActivity">
 
+    <EditText
+        android:id="@+id/usernameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:ems="20"
+        android:hint="Enter username"
+        android:inputType="textAutoComplete|textEmailAddress" />
 
-    <LinearLayout
+    <Button
+        android:id="@+id/createAccountButton"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Sign Up"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/mlinear"
-        android:layout_marginTop="37dp"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:text="LOGIN"
+        android:layout_below="@+id/usernameEditText"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        >
-
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/start_button"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="12dp"
-            android:layout_marginStart="12dp"
-            android:hint="@string/prompt_username"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textColorLink="@android:color/black"
-            android:textCursorDrawable="@android:color/black"
-            android:layout_weight="3"/>
-
-        <Button
-            android:id="@+id/submit_button"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:text="@string/action_sign_in"
-            android:textStyle="bold"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            />
-
-
-    </LinearLayout>
-
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/mlinear"
-        android:adjustViewBounds="true"
-        android:src="@drawable/capital" />
-
-
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>
-
-
-
-

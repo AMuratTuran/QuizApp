@@ -49,6 +49,50 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:826481875337:android:ba72dac0dda3f407",
+        "android_client_info": {
+          "package_name": "com.example.muratturan.sociallibrary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "826481875337-3v999fahiom8p8d7abc5dhhe6ed20v4p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.muratturan.sociallibrary",
+            "certificate_hash": "4ead08cce5f1ea31e79b45bf482200052ec9c744"
+          }
+        },
+        {
+          "client_id": "826481875337-d16d9vpo6hesordbo1v0fv7oncfdmnlu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBalFDpqM8iIgPoQVsReENn07QZEccc5g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "826481875337-d16d9vpo6hesordbo1v0fv7oncfdmnlu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

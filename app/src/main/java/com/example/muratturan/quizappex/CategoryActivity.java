@@ -45,11 +45,12 @@ public class CategoryActivity extends Activity implements OptionListFragment.Opt
                         questions.clear();
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             questions.add(ds.getValue().toString());
-                            System.out.println("51");
+
                         }
-                        System.out.println("55");
+
                         database.putStringArrayList("MultArrayList", questions);
                         database.putString("category", "Multiplication");
+                        database.putBoolean("isLargeScreen",true);
                         points.setArguments(database);
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.fragment_container, points);
@@ -80,6 +81,41 @@ public class CategoryActivity extends Activity implements OptionListFragment.Opt
                         }
                         database.putStringArrayList("MultArrayList", questions);
                         database.putString("category", "Sum");
+                        database.putBoolean("isLargeScreen",true);
+                        points.setArguments(database);
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.fragment_container, points);
+                        ft.addToBackStack(null);
+                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                        ft.commit();
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            else if (position == 2) {
+
+                final PointFragment points = new PointFragment();
+                final Bundle database = new Bundle();
+
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("Division");
+                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        questions.clear();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            questions.add(ds.getValue().toString());
+                        }
+                        database.putStringArrayList("MultArrayList", questions);
+                        database.putString("category", "Division");
+                        database.putBoolean("isLargeScreen",true);
                         points.setArguments(database);
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(R.id.fragment_container, points);
@@ -101,6 +137,7 @@ public class CategoryActivity extends Activity implements OptionListFragment.Opt
         } else {
 
             if (position == 0) {
+
 
                 mDatabase = FirebaseDatabase.getInstance().getReference().child("Multiplication");
                 mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -134,6 +171,46 @@ public class CategoryActivity extends Activity implements OptionListFragment.Opt
                             questions.add(ds.getValue().toString());
                         }
                         useIntent("Sum");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            else if (position == 2) {
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("Division");
+                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        questions.clear();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            questions.add(ds.getValue().toString());
+                        }
+                        useIntent("Division");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+            else if (position == 3) {
+                mDatabase = FirebaseDatabase.getInstance().getReference().child("Subtraction");
+                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        questions.clear();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            questions.add(ds.getValue().toString());
+                        }
+                        useIntent("Subtraction");
                     }
 
                     @Override

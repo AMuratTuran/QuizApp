@@ -24,7 +24,7 @@ public class OptionListFragment extends ListFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        String[] options = {"Multiplication", "Sum", "Capitals"};
+        String[] options = {"Multiplication", "Sum", "Division","Subtraction"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(inflater.getContext()
                 , android.R.layout.simple_list_item_1, options);
         setListAdapter(adapter);
